@@ -1,0 +1,26 @@
+#Import Excel file test
+import sqlite3
+from sqlite3 import OperationalError
+import os
+from urllib.request import urlopen
+import json
+import time
+import pandas as pd
+import re
+import pandas.io.sql
+
+#change directory
+os.chdir('C:\\Users\\Jason\\Documents\\Depaul\\ITF Competition\\Raw Data')
+#deleted first row of Accountability Reports - AYP Status_Historical.xlsx
+xls_file=pd.ExcelFile('Accountability Reports - AYP Status_Historical.xlsx')
+table=xls_file.parse('Historical AYP')
+
+table.columns
+
+#export to SQL
+conn = sqlite3.connect('ChicagoPublicSchools.db')
+
+table.to_sql('HistoricalAYP',conn)
+
+c = conn.cursor()
+print(c.execute("SELECT * FROM HistoricalAYP;").fetchall())
